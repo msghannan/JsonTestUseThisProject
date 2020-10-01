@@ -1,0 +1,41 @@
+﻿@model List<JsonTestUseThisProject.Models.JsonData>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@* ----------- View all ----------- *@
+
+<h1>View All</h1>
+
+@foreach (var item in Model)
+{
+    <p>
+        ID: @item.id<br />
+        Position: @item.actualPos<br />
+        Status: @item.status<br />
+    </p>
+}
+
+
+
+
+
+@* ----------- Selected by ID ----------- *@
+
+<h1>Select by ID</h1>
+@{
+    JsonTestUseThisProject.Models.JsonData jsonDATA = new JsonTestUseThisProject.Models.JsonData();
+
+    jsonDATA = Model.FirstOrDefault(x => x.id == 1);
+    <p>
+        <p> Chosed ID:  @jsonDATA.id </p>
+
+        ID: @jsonDATA.id<br/>
+        Position: @jsonDATA.actualPos<br/>
+        Status: @jsonDATA.status<br />
+    </p>
+}
+
+
+
