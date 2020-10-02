@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using JsonTestUseThisProject.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -13,11 +16,20 @@ namespace JsonTestUseThisProject.Controllers
     {
         public ActionResult Index()
         {
-            List<JsonData> data = new List<JsonData>();
-            JSONReadWrite readWrite = new JSONReadWrite();
-            data = JsonConvert.DeserializeObject<List<JsonData>>(readWrite.Read("json.json", "data"));
+            var webClient = new WebClient();
+            var jsonFile = webClient.DownloadString(@"wwwroot\Data\json.json");
+            var dataFromJson = JsonConvert.DeserializeObject<ObservableCollection<JsonData>>(jsonFile);
 
-            return View(data);
+            return View(dataFromJson);
+        }
+
+        public ActionResult Details(int id)
+        {
+            var webClient = new WebClient();
+            var jsonFile = webClient.DownloadString(@"wwwroot\Data\json.json");
+            var dataFromJson = JsonConvert.DeserializeObject<ObservableCollection<JsonData>>(jsonFile).Where(j => j.id == id);
+
+            return View(dataFromJson);
         }
     }
 
@@ -51,6 +63,7 @@ namespace JsonTestUseThisProject.Controllers
             }
             return jsonResult;
         }
+
 
         public void Write(string fileName, string location, string jSONString)
         {

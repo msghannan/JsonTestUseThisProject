@@ -11,4 +11,6 @@ namespace JsonTestUseThisProject.Models
         public double actualPos { get; set; }
         public int status { get; set; }
     }
+
+    
 }

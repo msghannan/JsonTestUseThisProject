@@ -1,4 +1,5 @@
-﻿@model List<JsonTestUseThisProject.Models.JsonData>
+﻿@using JsonTestUseThisProject.Models
+@model IEnumerable<JsonTestUseThisProject.Models.JsonData>
 
 @{
     ViewBag.Title = "Index";
@@ -8,15 +9,16 @@
 
 <h1>View All</h1>
 
-@foreach (var item in Model)
-{
-    <p>
-        ID: @item.id<br />
-        Position: @item.actualPos<br />
-        Status: @item.status<br />
-    </p>
-}
-
+<div style="font-family: Arial">
+    <ul>
+        @foreach (JsonData item in @Model)
+        {
+        <li>
+            <a href="@Url.Action("Details", new { id = item.id})">@item.id</a>
+        </li>
+        }
+    </ul>
+</div>
 
 
 
