@@ -18,7 +18,7 @@ namespace JsonTestUseThisProject.Controllers
         {
             var webClient = new WebClient();
             var jsonFile = webClient.DownloadString(@"wwwroot\Data\json.json");
-            var dataFromJson = JsonConvert.DeserializeObject<ObservableCollection<JsonData>>(jsonFile);
+            var dataFromJson = JsonConvert.DeserializeObject<List<JsonData>>(jsonFile);
 
             return View(dataFromJson);
         }
@@ -27,7 +27,29 @@ namespace JsonTestUseThisProject.Controllers
         {
             var webClient = new WebClient();
             var jsonFile = webClient.DownloadString(@"wwwroot\Data\json.json");
-            var dataFromJson = JsonConvert.DeserializeObject<ObservableCollection<JsonData>>(jsonFile).Where(j => j.id == id);
+            var dataFromJson = JsonConvert.DeserializeObject<List<JsonData>>(jsonFile).Where(j => j.id == id);
+
+            return View(dataFromJson);
+        }
+
+
+        [HttpPost]
+        public ActionResult Details(JsonData jsonData, int id)
+        {
+            var webClient = new WebClient();
+
+            JSONReadWrite readWrite = new JSONReadWrite();
+            var jsonFile = webClient.DownloadString(@"wwwroot\Data\json.json");
+            var dataFromJson = JsonConvert.DeserializeObject<List<JsonData>>(jsonFile);
+
+            JsonData json = dataFromJson.FirstOrDefault(s => s.id == id);
+
+
+            int index = json.(x => x.status == jsonData.status);
+            dataFromJson[index] = jsonData;
+
+            string jsonString = JsonConvert.SerializeObject(index);
+            readWrite.Write("json.json", "Data", jsonString);
 
             return View(dataFromJson);
         }

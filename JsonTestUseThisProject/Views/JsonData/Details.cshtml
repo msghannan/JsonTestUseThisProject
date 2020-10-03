@@ -27,7 +27,7 @@
         </style>
     }
 
-    else
+    else if (item.status == 1)
     {
         <style>
             .box {
@@ -38,9 +38,26 @@
             }
         </style>
     }
+
+
 }
 
 <div class="box">
     <h1>Tank exempel</h1>
 </div>
+
+
+<h1>Update status</h1>
+@using (Html.BeginForm("Details", "JsonData", FormMethod.Post))
+{
+    JsonTestUseThisProject.Models.JsonData jsonData = new JsonTestUseThisProject.Models.JsonData();
+
+    <label asp-for="@jsonData.status">Set new status</label>
+    <br />
+    <input type="text" asp-for="@jsonData.status" name="status" />
+    <br />
+    <button type="@Url.Action("Details", new { id = jsonData.id})">Add/Update</button>
+}
+
+
 
