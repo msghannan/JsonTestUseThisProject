@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using JsonTestUseThisProject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace JsonTestUseThisProject.Controllers
 {
@@ -34,24 +35,23 @@ namespace JsonTestUseThisProject.Controllers
 
 
         [HttpPost]
-        public ActionResult Details(JsonData jsonData, int id)
+        public ActionResult Details(JsonData jsonData)
         {
-            var webClient = new WebClient();
-
+            List<JsonData> json = new List<JsonData>();
             JSONReadWrite readWrite = new JSONReadWrite();
-            var jsonFile = webClient.DownloadString(@"wwwroot\Data\json.json");
-            var dataFromJson = JsonConvert.DeserializeObject<List<JsonData>>(jsonFile);
 
-            JsonData json = dataFromJson.FirstOrDefault(s => s.id == id);
+            json = JsonConvert.DeserializeObject<List<JsonData>>(readWrite.Read("json.json", "Data"));
+
+            JsonData person = json.FirstOrDefault(x => x.id == jsonData.id);
+
+            int index = json.FindIndex(x => x.id == jsonData.id);
+            json[index] = jsonData;
 
 
-            int index = json.(x => x.status == jsonData.status);
-            dataFromJson[index] = jsonData;
+            string jSONString = JsonConvert.SerializeObject(json);
+            readWrite.Write("json.json", "Data", jSONString);
 
-            string jsonString = JsonConvert.SerializeObject(index);
-            readWrite.Write("json.json", "Data", jsonString);
-
-            return View(dataFromJson);
+            return View(json);
         }
     }
 
